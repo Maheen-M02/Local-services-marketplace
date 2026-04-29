@@ -47,7 +47,7 @@ export default function SignupPage() {
             curvature={0.12}
             tint="#a78bfa"
             mouseReact={true}
-            mouseStrength={0.35}
+            mouseStrength={1.2}
             pageLoadAnimation={true}
             brightness={0.85}
           />

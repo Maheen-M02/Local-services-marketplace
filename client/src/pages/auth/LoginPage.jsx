@@ -47,7 +47,7 @@ export default function LoginPage() {
             curvature={0.15}
             tint="#4f8fff"
             mouseReact={true}
-            mouseStrength={0.4}
+            mouseStrength={1.2}
             pageLoadAnimation={true}
             brightness={0.9}
           />

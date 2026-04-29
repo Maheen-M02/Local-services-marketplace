@@ -221,10 +221,16 @@ export default function FaultyTerminal({
     const ctn = containerRef.current;
     if (!ctn) return;
     const rect = ctn.getBoundingClientRect();
-    mouseRef.current = {
-      x: (e.clientX - rect.left) / rect.width,
-      y: 1 - (e.clientY - rect.top) / rect.height,
-    };
+    // Only react when cursor is over the container area
+    if (
+      e.clientX >= rect.left && e.clientX <= rect.right &&
+      e.clientY >= rect.top  && e.clientY <= rect.bottom
+    ) {
+      mouseRef.current = {
+        x: (e.clientX - rect.left) / rect.width,
+        y: 1 - (e.clientY - rect.top) / rect.height,
+      };
+    }
   }, []);
 
   useEffect(() => {
@@ -301,8 +307,8 @@ export default function FaultyTerminal({
       if (mouseReact) {
         const sm = smoothMouseRef.current;
         const m  = mouseRef.current;
-        sm.x += (m.x - sm.x) * 0.08;
-        sm.y += (m.y - sm.y) * 0.08;
+        sm.x += (m.x - sm.x) * 0.12;
+        sm.y += (m.y - sm.y) * 0.12;
         program.uniforms.uMouse.value[0] = sm.x;
         program.uniforms.uMouse.value[1] = sm.y;
       }
@@ -312,12 +318,17 @@ export default function FaultyTerminal({
 
     rafRef.current = requestAnimationFrame(update);
     ctn.appendChild(gl.canvas);
-    if (mouseReact) ctn.addEventListener('mousemove', handleMouseMove);
+
+    // Set canvas pointer-events to none so overlaid content doesn't block events
+    gl.canvas.style.pointerEvents = 'none';
+
+    // Listen on window so overlaid z-index layers don't swallow events
+    if (mouseReact) window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
     return () => {
       cancelAnimationFrame(rafRef.current);
       ro.disconnect();
-      if (mouseReact) ctn.removeEventListener('mousemove', handleMouseMove);
+      if (mouseReact) window.removeEventListener('mousemove', handleMouseMove);
       if (gl.canvas.parentElement === ctn) ctn.removeChild(gl.canvas);
       gl.getExtension('WEBGL_lose_context')?.loseContext();
       loadAnimationStartRef.current = 0;

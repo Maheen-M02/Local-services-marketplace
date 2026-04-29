@@ -14,7 +14,8 @@ const ScrollFloat = ({
   ease = 'back.inOut(2)',
   scrollStart = 'center bottom+=50%',
   scrollEnd = 'bottom bottom-=40%',
-  stagger = 0.03
+  stagger = 0.03,
+  style,
 }) => {
   const containerRef = useRef(null);
 
@@ -68,7 +69,7 @@ const ScrollFloat = ({
   }, [scrollContainerRef, animationDuration, ease, scrollStart, scrollEnd, stagger]);
 
   return (
-    <h2 ref={containerRef} className={`scroll-float ${containerClassName}`}>
+    <h2 ref={containerRef} className={`scroll-float ${containerClassName}`} style={style}>
       <span className={`scroll-float-text ${textClassName}`}>
         {splitText}
       </span>

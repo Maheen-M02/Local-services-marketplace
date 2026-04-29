@@ -440,23 +440,33 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
             {STATS.map((s, i) => (
-              <div key={s.label} className="text-center">
-                <ScrollFloat
-                  animationDuration={1.2}
-                  ease="back.inOut(2)"
-                  scrollStart="center bottom+=30%"
-                  scrollEnd="bottom bottom-=20%"
-                  stagger={0.05}
-                  containerClassName="justify-center"
-                  textClassName="text-stat text-4xl md:text-5xl font-display"
-                  style={{color:'#e8c840'}}
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: i * 0.1 }}
+                viewport={{ once: true }}
+                className="text-center"
+              >
+                <div
+                  className="font-display font-bold leading-none mb-2"
+                  style={{
+                    fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+                    background: 'linear-gradient(135deg, #c8a020, #f0d060)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
                 >
                   {s.number}
-                </ScrollFloat>
-                <div className="font-body text-sm font-light tracking-wide uppercase mt-1" style={{ letterSpacing: '0.1em', color:'rgba(240,234,216,0.45)' }}>
+                </div>
+                <div
+                  className="font-body text-sm font-light tracking-wide uppercase"
+                  style={{ letterSpacing: '0.1em', color: 'rgba(240,234,216,0.55)' }}
+                >
                   {s.label}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -538,30 +548,32 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }} viewport={{ once: true }}
           >
             <p className="mb-6 text-xs font-semibold uppercase tracking-[0.2em]" style={{color:'#c8a020'}}>Get started today</p>
-            <ScrollFloat
-              animationDuration={1.1}
-              ease="back.inOut(2)"
-              scrollStart="center bottom+=50%"
-              scrollEnd="bottom bottom-=40%"
-              stagger={0.035}
-              containerClassName="justify-center"
-              textClassName="text-section-title text-4xl md:text-6xl font-display leading-tight"
-              style={{color:'#f0ead8'}}
-            >
-              Your home deserves
-            </ScrollFloat>
-            <ScrollFloat
-              animationDuration={1.1}
-              ease="back.inOut(2)"
-              scrollStart="center bottom+=45%"
-              scrollEnd="bottom bottom-=35%"
-              stagger={0.04}
-              containerClassName="justify-center -mt-4"
-              textClassName="text-section-title text-4xl md:text-6xl italic font-display"
-              style={{color:'#e8c840'}}
-            >
-              the best care.
-            </ScrollFloat>
+            <div style={{color:'#f0ead8'}}>
+              <ScrollFloat
+                animationDuration={1.1}
+                ease="back.inOut(2)"
+                scrollStart="center bottom+=50%"
+                scrollEnd="bottom bottom-=40%"
+                stagger={0.035}
+                containerClassName="justify-center"
+                textClassName="text-section-title text-4xl md:text-6xl font-display leading-tight"
+              >
+                Your home deserves
+              </ScrollFloat>
+            </div>
+            <div style={{color:'#e8c840'}}>
+              <ScrollFloat
+                animationDuration={1.1}
+                ease="back.inOut(2)"
+                scrollStart="center bottom+=45%"
+                scrollEnd="bottom bottom-=35%"
+                stagger={0.04}
+                containerClassName="justify-center -mt-4"
+                textClassName="text-section-title text-4xl md:text-6xl italic font-display"
+              >
+                the best care.
+              </ScrollFloat>
+            </div>
             <p className="font-body text-lg font-light leading-relaxed mb-10 max-w-xl mx-auto" style={{color:'rgba(240,234,216,0.55)'}}>
               Join thousands of satisfied customers who trust ServifyX for every home service need.
             </p>

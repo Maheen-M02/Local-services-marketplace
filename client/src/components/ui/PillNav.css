@@ -242,7 +242,8 @@
   color: var(--hover-text, #fff);
 }
 
-/* ServifyX specific styles */
+
+/* ── ServifyX nav styles ──────────────────────────────────────────────────── */
 .servifyx-nav {
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.9);
@@ -262,53 +263,13 @@
   margin-right: 8px;
 }
 
+/* Default pill: dark background, white text */
 .servifyx-nav .pill {
   background: #1f2937 !important;
   color: #ffffff !important;
 }
 
-.servifyx-nav .pill .pill-label {
-  color: #ffffff !important;
-}
-
-.servifyx-nav .pill .pill-label-hover {
-  color: #ffffff !important;
-}
-
-@media (max-width: 768px) {
-  .servifyx-nav {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border-radius: 16px;
-    margin: 0 1rem;
-    padding: 0.5rem 1rem;
-  }
-  
-  .servifyx-nav .mobile-menu-button {
-    background: rgba(59, 130, 246, 0.1);
-    border: 1px solid rgba(59, 130, 246, 0.2);
-  }
-  
-  .servifyx-nav .mobile-menu-popover {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-  
-  .servifyx-nav .mobile-menu-link {
-    background: #1f2937 !important;
-    color: #ffffff !important;
-  }
-}
-
-/* Ensure text is always visible */
-.pill .pill-label,
-.pill .pill-label-hover {
-  opacity: 1 !important;
-  visibility: visible !important;
-  display: inline-block !important;
-}
-
+/* Default label: white */
 .servifyx-nav .pill .pill-label {
   color: #ffffff !important;
   font-size: 14px !important;
@@ -317,7 +278,21 @@
   letter-spacing: 0.5px !important;
 }
 
-/* Debug styles - remove after fixing */
+/* Hover label: dark — the hover circle is white (#ffffff = --base),
+   so the text that slides in on hover must be dark to be readable */
+.servifyx-nav .pill .pill-label-hover {
+  color: #1f2937 !important;
+}
+
+/* Ensure labels are always visible */
+.pill .pill-label,
+.pill .pill-label-hover {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline-block !important;
+}
+
+/* Minimum tap target */
 .pill {
   min-width: 80px !important;
   min-height: 36px !important;
@@ -326,4 +301,36 @@
 .pill .label-stack {
   width: 100% !important;
   text-align: center !important;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .servifyx-nav {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    margin: 0 1rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .servifyx-nav .mobile-menu-button {
+    background: #1f2937;
+    border: none;
+  }
+
+  .servifyx-nav .mobile-menu-popover {
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .servifyx-nav .mobile-menu-link {
+    background: #1f2937 !important;
+    color: #ffffff !important;
+  }
+
+  .servifyx-nav .mobile-menu-link:hover {
+    background: #374151 !important;
+    color: #ffffff !important;
+  }
 }

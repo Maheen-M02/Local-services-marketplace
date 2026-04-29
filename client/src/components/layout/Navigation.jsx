@@ -72,7 +72,7 @@ export default function Navigation() {
         className="servifyx-nav"
         baseColor="#ffffff"
         pillColor="#1f2937"
-        hoveredPillTextColor="#ffffff"
+        hoveredPillTextColor="#1f2937"
         pillTextColor="#ffffff"
         ease="power2.easeOut"
         initialLoadAnimation={true}

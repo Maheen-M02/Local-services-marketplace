@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    @apply bg-white text-gray-900;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Hide native cursor on pointer devices — replaced by FluidGlassCursor */
+  @media (pointer: fine) {
+    *, *::before, *::after {
+      cursor: none !important;
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Headings default to display font */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+}
+
+@layer components {
+  /* ── Typography helpers ── */
+  .font-display   { font-family: 'Playfair Display', Georgia, serif; }
+  .font-body      { font-family: 'DM Sans', system-ui, sans-serif; }
+  .font-mono-dm   { font-family: 'DM Mono', monospace; }
+
+  /* Hero headline — large serif with tight tracking */
+  .text-hero {
+    font-family: 'Playfair Display', Georgia, serif;
+    @apply font-bold leading-[1.05] tracking-tighter;
+    letter-spacing: -0.03em;
+  }
+
+  /* Section headline */
+  .text-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    @apply font-bold leading-tight;
+    letter-spacing: -0.02em;
+  }
+
+  /* Eyebrow / label above headings */
+  .text-eyebrow {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    @apply text-xs font-semibold uppercase tracking-[0.2em] text-primary-500;
+  }
+
+  /* Body lead */
+  .text-lead {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    @apply text-lg font-light leading-relaxed text-gray-500;
+    letter-spacing: 0.01em;
+  }
+
+  /* Stat number */
+  .text-stat {
+    font-family: 'Playfair Display', Georgia, serif;
+    @apply font-bold leading-none;
+    letter-spacing: -0.03em;
+  }
+
+  /* Quote / testimonial */
+  .text-quote {
+    font-family: 'Playfair Display', Georgia, serif;
+    @apply italic font-normal leading-relaxed text-gray-600;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-600 via-violet-600 to-primary-800 bg-clip-text text-transparent;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium px-6 py-3 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md active:scale-95;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    letter-spacing: 0.01em;
+  }
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 text-gray-900 font-medium px-6 py-3 rounded-lg border border-gray-200 transition-all duration-200 shadow-sm hover:shadow-md active:scale-95;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+  .btn-ghost {
+    @apply hover:bg-gray-100 text-gray-700 font-medium px-4 py-2 rounded-lg transition-all duration-200 active:scale-95;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200;
+  }
+  .input-field {
+    @apply w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 placeholder-gray-400;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-sm border border-white/20 shadow-lg;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+.animate-float { animation: float 6s ease-in-out infinite; }
+
+.skeleton { @apply animate-pulse bg-gray-200 rounded; }
+
+/* Dark mode */
+.dark { @apply bg-gray-900 text-gray-100; }
+.dark .card        { @apply bg-gray-800 border-gray-700; }
+.dark .input-field { @apply bg-gray-800 border-gray-700 text-gray-100; }
+.dark .glass-card  { @apply bg-gray-800/80 border-gray-700/20; }

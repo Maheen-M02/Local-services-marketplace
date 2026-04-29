@@ -1,0 +1,20 @@
+.scroll-float {
+  overflow: hidden;
+  /* Reset margin so it sits naturally in flow */
+  margin: 0;
+}
+
+.scroll-float-text {
+  display: inline-block;
+  /* Default size — overridden by textClassName on each usage */
+  font-size: clamp(1.6rem, 8vw, 10rem);
+  font-weight: 900;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.char {
+  display: inline-block;
+  /* Prevent layout shift during transform */
+  will-change: opacity, transform;
+}

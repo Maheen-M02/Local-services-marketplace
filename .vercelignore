@@ -1,0 +1,14 @@
+# Dev files
+node_modules
+client/node_modules
+server/node_modules
+
+# Local env files (set these in Vercel dashboard instead)
+.env
+client/.env
+server/.env
+
+# Dev/test artifacts
+*.log
+server/test-db.js
+server/scripts/seedData.js

@@ -535,14 +535,39 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════════════════════════════
           CTA
       ══════════════════════════════════════════════════════════════ */}
-      <section className="py-28 relative overflow-hidden" style={{background:'linear-gradient(160deg,#0d0f1a,#111428)'}}>
-        {/* Gold glow */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full filter blur-3xl opacity-20"
-            style={{background:'#c8a020'}} />
+      <section className="py-28 relative overflow-hidden min-h-[520px] flex items-center">
+
+        {/* ── Background video ── */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ zIndex: 0 }}
+        >
+          <source src="/hero.mp4" type="video/mp4" />
+        </video>
+
+        {/* ── Dark overlay so text stays readable ── */}
+        <div
+          className="absolute inset-0"
+          style={{
+            zIndex: 1,
+            background: 'linear-gradient(160deg, rgba(13,15,26,0.78) 0%, rgba(17,20,40,0.72) 100%)',
+          }}
+        />
+
+        {/* ── Gold ambient glow (sits above overlay) ── */}
+        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 2 }}>
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full filter blur-3xl opacity-20"
+            style={{ background: '#c8a020' }}
+          />
         </div>
 
-        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        {/* ── Content ── */}
+        <div className="relative w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style={{ zIndex: 3 }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }} viewport={{ once: true }}

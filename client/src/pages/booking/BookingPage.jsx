@@ -39,12 +39,33 @@ export default function BookingPage() {
 
   const fetchService = async () => {
     try {
+      // Try API first
       const response = await servicesAPI.getById(serviceId)
       setService(response.data.service)
     } catch (error) {
-      console.error('Error fetching service:', error)
-      toast.error('Service not found')
-      navigate('/services')
+      // Fall back to mock data for mock service IDs
+      const MOCK = [
+        { _id:'svc-001',id:'svc-001', name:'Deep Home Cleaning',          category:'cleaning',       priceType:'fixed',    basePrice:89,  duration:{estimated:180}, images:[{url:'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400'}] },
+        { _id:'svc-002',id:'svc-002', name:'Plumbing Repair & Installation',category:'plumbing',     priceType:'hourly',   basePrice:99,  duration:{estimated:120}, images:[{url:'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=400'}] },
+        { _id:'svc-003',id:'svc-003', name:'Electrical Safety Check',      category:'electrical',    priceType:'fixed',    basePrice:149, duration:{estimated:150}, images:[{url:'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=400'}] },
+        { _id:'svc-004',id:'svc-004', name:'Interior Painting',            category:'painting',      priceType:'per-room', basePrice:199, duration:{estimated:300}, images:[{url:'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400'}] },
+        { _id:'svc-005',id:'svc-005', name:'Carpentry & Furniture Assembly',category:'carpentry',    priceType:'hourly',   basePrice:79,  duration:{estimated:120}, images:[{url:'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400'}] },
+        { _id:'svc-006',id:'svc-006', name:'Garden & Lawn Maintenance',    category:'gardening',     priceType:'fixed',    basePrice:69,  duration:{estimated:120}, images:[{url:'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400'}] },
+        { _id:'svc-007',id:'svc-007', name:'Appliance Repair',             category:'appliance-repair',priceType:'fixed',  basePrice:119, duration:{estimated:90},  images:[{url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400'}] },
+        { _id:'svc-008',id:'svc-008', name:'Pest Control Treatment',       category:'pest-control',  priceType:'fixed',    basePrice:129, duration:{estimated:90},  images:[{url:'https://images.unsplash.com/photo-1632923057155-dd35366009b5?w=400'}] },
+        { _id:'svc-009',id:'svc-009', name:'Home Moving Service',          category:'moving',        priceType:'hourly',   basePrice:149, duration:{estimated:240}, images:[{url:'https://images.unsplash.com/photo-1600518464441-9154a4dea21b?w=400'}] },
+        { _id:'svc-010',id:'svc-010', name:'HVAC Service & Repair',        category:'other',         priceType:'fixed',    basePrice:179, duration:{estimated:120}, images:[{url:'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400'}] },
+        { _id:'svc-011',id:'svc-011', name:'Window & Gutter Cleaning',     category:'cleaning',      priceType:'fixed',    basePrice:79,  duration:{estimated:150}, images:[{url:'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400'}] },
+        { _id:'svc-012',id:'svc-012', name:'Exterior Painting',            category:'painting',      priceType:'fixed',    basePrice:349, duration:{estimated:480}, images:[{url:'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=400'}] },
+      ]
+      const mock = MOCK.find(s => s._id === serviceId || s.id === serviceId)
+      if (mock) {
+        setService(mock)
+      } else {
+        console.error('Service not found:', error)
+        toast.error('Service not found')
+        navigate('/services')
+      }
     } finally {
       setLoading(false)
     }
@@ -55,11 +76,16 @@ export default function BookingPage() {
     setSubmitting(true)
 
     try {
-      const response = await bookingsAPI.create({
-        serviceId,
-        ...bookingData
-      })
+      // For mock services, simulate a successful booking
+      const isMockService = serviceId.startsWith('svc-')
+      if (isMockService) {
+        await new Promise(r => setTimeout(r, 800)) // simulate network delay
+        toast.success('Booking confirmed! (Demo mode)')
+        navigate('/dashboard')
+        return
+      }
 
+      const response = await bookingsAPI.create({ serviceId, ...bookingData })
       toast.success('Booking created successfully!')
       navigate(`/tracking/${response.data.booking._id}`)
     } catch (error) {

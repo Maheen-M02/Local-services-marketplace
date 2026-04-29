@@ -2,21 +2,36 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { 
-  Star, 
-  Clock, 
-  MapPin, 
-  Shield, 
-  CheckCircle,
-  Calendar,
-  ArrowLeft,
-  Heart,
-  Share2
+  Star, Clock, MapPin, Shield, CheckCircle,
+  Calendar, ArrowLeft, Heart, Share2
 } from 'lucide-react'
 import { servicesAPI, reviewsAPI } from '../../services/api'
 import { useAuth } from '../../contexts/AuthContext'
 import Button from '../../components/ui/Button'
 import Card from '../../components/ui/Card'
 import LoadingSpinner from '../../components/ui/LoadingSpinner'
+
+// Import mock data from ServiceListing (inline here for self-containment)
+const MOCK_SERVICES = [
+  { _id:'svc-001',id:'svc-001', name:'Deep Home Cleaning',         category:'cleaning',       priceType:'fixed',    basePrice:89,  duration:{estimated:180}, rating:{average:4.9,count:312}, images:[{url:'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80'}], features:['All rooms cleaned','Eco-friendly products','Insured professionals','Satisfaction guarantee'], requirements:['Clear access to all rooms','Pets secured during service'], serviceArea:{radius:25}, description:'Full deep-clean of your entire home by certified professionals. Includes kitchen, bathrooms, bedrooms, and living areas.' },
+  { _id:'svc-002',id:'svc-002', name:'Plumbing Repair & Installation', category:'plumbing',   priceType:'hourly',   basePrice:99,  duration:{estimated:120}, rating:{average:4.8,count:198}, images:[{url:'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=80'}], features:['Licensed plumbers','Same-day service','Parts included','90-day warranty'], requirements:['Water shutoff accessible','Clear workspace around fixtures'], serviceArea:{radius:20}, description:'Expert plumbing services — leak repairs, pipe installations, drain cleaning, and fixture replacements.' },
+  { _id:'svc-003',id:'svc-003', name:'Electrical Safety Check',    category:'electrical',     priceType:'fixed',    basePrice:149, duration:{estimated:150}, rating:{average:4.9,count:145}, images:[{url:'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80'}], features:['Full panel inspection','Outlet testing','Safety report','Code compliance check'], requirements:['Access to electrical panel','Adult present during service'], serviceArea:{radius:30}, description:'Licensed electricians inspect your home wiring, panel, outlets, and fixtures. Repairs and upgrades available.' },
+  { _id:'svc-004',id:'svc-004', name:'Interior Painting',          category:'painting',       priceType:'per-room', basePrice:199, duration:{estimated:300}, rating:{average:4.7,count:89},  images:[{url:'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&q=80'}], features:['Premium paints','Furniture protection','Clean edges','Same-day dry'], requirements:['Furniture moved or covered','Good ventilation available'], serviceArea:{radius:20}, description:'Professional interior painting for any room. We handle prep, priming, painting, and cleanup.' },
+  { _id:'svc-005',id:'svc-005', name:'Carpentry & Furniture Assembly', category:'carpentry',  priceType:'hourly',   basePrice:79,  duration:{estimated:120}, rating:{average:4.8,count:203}, images:[{url:'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&q=80'}], features:['All tools provided','Flat-pack assembly','Custom shelving','Minor repairs'], requirements:['Parts and hardware available','Clear workspace'], serviceArea:{radius:25}, description:'Custom carpentry, furniture assembly, shelving installation, and minor woodwork repairs.' },
+  { _id:'svc-006',id:'svc-006', name:'Garden & Lawn Maintenance',  category:'gardening',      priceType:'fixed',    basePrice:69,  duration:{estimated:120}, rating:{average:4.6,count:167}, images:[{url:'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80'}], features:['Lawn mowing','Edge trimming','Weed removal','Seasonal planting'], requirements:['Gate access to garden','Water source available'], serviceArea:{radius:15}, description:'Complete garden care — mowing, trimming, weeding, planting, and seasonal cleanup.' },
+  { _id:'svc-007',id:'svc-007', name:'Appliance Repair',           category:'appliance-repair',priceType:'fixed',   basePrice:119, duration:{estimated:90},  rating:{average:4.8,count:241}, images:[{url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80'}], features:['All major brands','Parts on hand','Diagnostic included','6-month warranty'], requirements:['Appliance accessible','Model number ready'], serviceArea:{radius:20}, description:'Fast repair for washing machines, dryers, dishwashers, ovens, fridges, and more.' },
+  { _id:'svc-008',id:'svc-008', name:'Pest Control Treatment',     category:'pest-control',   priceType:'fixed',    basePrice:129, duration:{estimated:90},  rating:{average:4.7,count:118}, images:[{url:'https://images.unsplash.com/photo-1632923057155-dd35366009b5?w=800&q=80'}], features:['Child & pet safe','Guaranteed results','Follow-up visit','Preventive treatment'], requirements:['Vacate for 2 hours post-treatment','Food stored away'], serviceArea:{radius:30}, description:'Safe and effective pest control for ants, cockroaches, rodents, bed bugs, and more.' },
+  { _id:'svc-009',id:'svc-009', name:'Home Moving Service',        category:'moving',         priceType:'hourly',   basePrice:149, duration:{estimated:240}, rating:{average:4.6,count:94},  images:[{url:'https://images.unsplash.com/photo-1600518464441-9154a4dea21b?w=800&q=80'}], features:['Packing materials','Furniture disassembly','Insurance covered','On-time guarantee'], requirements:['Parking available','Elevator access if applicable'], serviceArea:{radius:50}, description:'Professional movers for local and long-distance moves. Packing, loading, transport, and unpacking.' },
+  { _id:'svc-010',id:'svc-010', name:'HVAC Service & Repair',      category:'other',          priceType:'fixed',    basePrice:179, duration:{estimated:120}, rating:{average:4.9,count:156}, images:[{url:'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800&q=80'}], features:['All HVAC brands','Filter replacement','Refrigerant check','Energy efficiency report'], requirements:['Access to outdoor unit','Thermostat accessible'], serviceArea:{radius:25}, description:'Air conditioning and heating system maintenance, repair, and installation by certified technicians.' },
+  { _id:'svc-011',id:'svc-011', name:'Window & Gutter Cleaning',   category:'cleaning',       priceType:'fixed',    basePrice:79,  duration:{estimated:150}, rating:{average:4.8,count:187}, images:[{url:'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=800&q=80'}], features:['Inside & outside windows','Gutter flush','Streak-free finish','Ladder work included'], requirements:['Safe ladder access','Pets secured'], serviceArea:{radius:20}, description:'Streak-free window cleaning inside and out, plus full gutter clearing and flush.' },
+  { _id:'svc-012',id:'svc-012', name:'Exterior Painting',          category:'painting',       priceType:'fixed',    basePrice:349, duration:{estimated:480}, rating:{average:4.7,count:62},  images:[{url:'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800&q=80'}], features:['Weather-resistant paint','Surface prep included','Masking & protection','2-year warranty'], requirements:['Clear perimeter access','Dry weather forecast'], serviceArea:{radius:15}, description:'Full exterior painting including walls, trim, doors, and fences. Weather-resistant paints used.' },
+]
+
+const MOCK_REVIEWS = [
+  { user:{firstName:'Sarah',lastName:'J.'}, rating:5, comment:'Absolutely fantastic service. The team was professional, on time, and left everything spotless.', createdAt:'2025-04-20' },
+  { user:{firstName:'Michael',lastName:'C.'}, rating:5, comment:'Highly recommend! Great value for money and the results exceeded my expectations.', createdAt:'2025-04-15' },
+  { user:{firstName:'Emily',lastName:'R.'}, rating:4, comment:'Very good service overall. Minor scheduling hiccup but the work quality was excellent.', createdAt:'2025-04-10' },
+]
 
 export default function ServiceDetails() {
   const { id } = useParams()
@@ -34,17 +49,39 @@ export default function ServiceDetails() {
   const fetchServiceDetails = async () => {
     try {
       setLoading(true)
-      const [serviceRes, reviewsRes, similarRes] = await Promise.all([
-        servicesAPI.getById(id),
-        reviewsAPI.getByService(id),
-        servicesAPI.getById(id).then(res => 
-          servicesAPI.getAll({ category: res.data.service.category, limit: 4 })
-        ).catch(() => ({ data: { services: [] } }))
-      ])
 
-      setService(serviceRes.data.service)
-      setReviews(reviewsRes.data.reviews || [])
-      setSimilarServices(similarRes.data.services || [])
+      // Try API first, fall back to mock data
+      let svc = null
+      let revs = []
+      let similar = []
+
+      try {
+        const serviceRes = await servicesAPI.getById(id)
+        svc = serviceRes.data.service
+      } catch {
+        // Use mock data
+        svc = MOCK_SERVICES.find(s => s._id === id || s.id === id) || null
+      }
+
+      if (!svc) {
+        setLoading(false)
+        return
+      }
+
+      // Reviews — use mock if API fails
+      try {
+        const reviewsRes = await reviewsAPI.getByService(id)
+        revs = reviewsRes.data.reviews || []
+      } catch {
+        revs = MOCK_REVIEWS
+      }
+
+      // Similar services — same category from mock
+      similar = MOCK_SERVICES.filter(s => s.category === svc.category && s._id !== svc._id).slice(0, 3)
+
+      setService(svc)
+      setReviews(revs)
+      setSimilarServices(similar)
     } catch (error) {
       console.error('Error fetching service details:', error)
     } finally {
